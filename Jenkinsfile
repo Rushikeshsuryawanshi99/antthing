@@ -1,32 +1,40 @@
-pipeline{
+pipeline {
     agent any
-    tools {
+     tools {
         maven 'Maven' 
-    }
-    stages{
+        }
+    stages {
         stage("Test"){
             steps{
-                sh "mvn Test"
+
+                // mvn test
+                sh "mvn test"
             }
             
         }
         stage("Build"){
             steps{
                 sh "mvn package"
+                
             }
             
         }
-        stage("Deploytest"){
+        stage("Deploy on Test"){
             steps{
-                deploy adapters: [tomcat9(credentialsId: '392444ff-9733-4baf-a36a-2dc2dd2bc97d', path: '', url: 'http://54.157.39.194:8080')], contextPath: '/app', war: '**/*.war'
+                // deploy on container -> plugin
+                deploy adapters: [tomcat9(credentialsId: '1b9ee3d8-fa05-402c-935c-bba3bd0b02dd', path: '', url: 'http://54.157.39.194:8080')], contextPath: '/app', war: '**/*.war'
+              
             }
             
         }
-        stage("Deployprod"){
-            steps{
-                deploy adapters: [tomcat9(credentialsId: '392444ff-9733-4baf-a36a-2dc2dd2bc97d', path: '', url: 'http://54.211.60.24:8080/')], contextPath: '/app', war: '**/*.war'
-            }
+        stage("Deploy on Prod"){
             
+            
+            steps{
+                // deploy on container -> plugin
+                deploy adapters: [tomcat9(credentialsId: '1b9ee3d8-fa05-402c-935c-bba3bd0b02dd', path: '', url: 'http://54.211.60.24:8080')], contextPath: '/app', war: '**/*.war'
+
+            }
         }
     }
     post{
@@ -35,9 +43,11 @@ pipeline{
         }
         success{
             echo "========pipeline executed successfully ========"
+             
         }
         failure{
             echo "========pipeline execution failed========"
-        }
-    }
+             
+        }
+    }
 }
