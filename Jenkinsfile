@@ -8,25 +8,21 @@ pipeline{
             steps{
                 sh "mvn test"
             }
-            
         }
         stage("Build"){
             steps{
-                sh "mvn package"
+                sh "package"
             }
-            
         }
-        stage("Deploytest"){
+        stage("deploytest"){
             steps{
-                deploy adapters: [tomcat9(credentialsId: '392444ff-9733-4baf-a36a-2dc2dd2bc97d', path: '', url: 'http://54.157.39.194:8080')], contextPath: '/app', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: '5cd79529-2435-4327-9cef-5b2a16a65e39', path: '', url: 'http://54.175.69.79:8080')], contextPath: '/app', war: '**/*.war'
             }
-            
         }
-        stage("Deployprod"){
+        stage("deployprod"){
             steps{
-                deploy adapters: [tomcat9(credentialsId: '392444ff-9733-4baf-a36a-2dc2dd2bc97d', path: '', url: 'http://54.211.60.24:8080/')], contextPath: '/app', war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: '5cd79529-2435-4327-9cef-5b2a16a65e39', path: '', url: 'http://18.233.166.130:8080')], contextPath: '/app', war: '**/*.war'
             }
-            
         }
     }
     post{
